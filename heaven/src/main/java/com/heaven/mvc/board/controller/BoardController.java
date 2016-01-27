@@ -73,6 +73,9 @@ public class BoardController {
 			if (boardVO.getPassword() == pwd) {
 				boardService.edit(boardVO);
 				sessionStatus.setComplete();
+				/*
+				 * 글 수정 jsp는 추가로 구현해야 한다. 현재는 구성되어있지 않아 목록페이지로 이동하게 해놨음.
+				 */
 				return "redirect:/board/list";
 			}
 
