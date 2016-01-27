@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:jdbc="http://www.springframework.org/schema/jdbc"
+	xsi:schemaLocation="http://www.springframework.org/schema/jdbc http://www.springframework.org/schema/jdbc/spring-jdbc-3.1.xsd
+		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+	<!-- Root Context: defines shared resources visible to all other web components -->
+
+	<jdbc:embedded-database id="dataSource" type="HSQL">
+		<jdbc:script location="classpath:BoardSchema.sql" />
+		<jdbc:script location="classpath:BoardData.sql" />
+
+		<!-- <jdbc:script location="classpath*:BoardSchema.sql" /> <jdbc:script 
+			location="classpath*:BoardData.sql" /> -->
+	</jdbc:embedded-database>
+
+	<!-- sqlSessionFactory -->
+	<bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
+		<property name="dataSource" ref="dataSource" />
+		<!-- mybatis-config.xml 교재 오타인듯 -->
+		<!-- <property name="configLocation" value="classpath:sqlmap/config/mybatis-config.xml" /> -->
+		<property name="configLocation" value="classpath:sqlmap/config/sqlmap-config.xml" />
+		<property name="mapperLocations">
+			<list>
+				<value>classpath:sqlmap/sqlmap-board.xml</value>
+			</list>
+		</property>
+	</bean>
+
+	<!-- sqlSessionTemplate -->
+	<bean id="sqlSessionTemplate" class="org.mybatis.spring.SqlSessionTemplate"
+		destroy-method="clearCache">
+		<constructor-arg ref="sqlSessionFactory" />
+	</bean>
+</beans>
